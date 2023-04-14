@@ -1,0 +1,68 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+
+
+public class Jokes {
+
+    static HashSet<String> jokesList = new HashSet<String>();
+    static HashSet<String> usedJokes = new HashSet<String>();
+
+
+    public static void importJokes() {
+
+
+        try {
+            FileReader infile = new FileReader("funnyJokes.txt"); // hämta fil projektmapp
+            BufferedReader lineReader = new BufferedReader(infile); // läsa rader
+            String line = lineReader.readLine(); // läser in tecken tills radslut. när den är klar med alla rader returneras null
+
+            while ((line = lineReader.readLine()) != null) {
+                jokesList.add(line);
+
+            }
+            lineReader.close();
+            infile.close();
+        } catch (FileNotFoundException e) {                // först filenotfound
+            System.out.println("Hittar inte filen");
+        } catch (IOException e) {                          // sen ioexception
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static String getJoke() {
+
+        Iterator<String> iterator = jokesList.iterator();
+
+        if (jokesList.isEmpty()) {
+            return " Sorry, no jokes available";
+        }
+        String str = iterator.next();
+        if (!(usedJokes.contains(str))) {
+            usedJokes.add(str);
+        } else {
+            jokesList.remove(str);
+            return getJoke();
+        }
+
+        return str;
+    }
+
+    public static String splitJoke(String joke) {
+        if (joke.contains("?")) {
+
+            int findIndex = joke.indexOf('?');
+            String jokeQuestion = joke.substring(0, findIndex + 1);
+            String jokeAnswer = joke.substring(findIndex + 2);
+
+            return jokeQuestion + "\n" + "Answer: " + jokeAnswer + "\n";
+        } else {
+            return joke + "\n";
+        }
+    }
+
+}
+
