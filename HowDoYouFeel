@@ -1,0 +1,132 @@
+import java.util.Scanner;
+
+class HowDoYouFeel {
+
+    Jokes jokes;
+    private final int EXIT_COMMAND = 0;
+
+
+    public static void main(String[] args) {
+
+        new HowDoYouFeel().run();
+
+
+    }
+
+    Scanner input = new Scanner(System.in);
+
+    public void run() {
+        Jokes.importJokes();
+        commandLoop();
+
+    }
+
+
+    public void commandLoop() {
+
+        int command = 0;
+
+        do {
+            printMenu();
+            command = myInputReader();
+            handleCommand(command);
+        } while (command != EXIT_COMMAND);
+    }
+
+    public void printMenu() {
+
+
+        quickPrint("\nHow do you really feel?\n");
+        quickPrint("\n");
+        quickPrint("1. Good\n");
+        quickPrint("2. Bad\n");
+        quickPrint("3. Nothing\n");
+        quickPrint("0. Exit program\n");
+
+        quickPrint("?>");
+    }
+
+    public void printSecondMenu() {
+
+        quickPrint("Would you like another joke?\n");
+        quickPrint("\n");
+        quickPrint("1. Yes\n");
+        quickPrint("2. No, please stop.\n");
+        quickPrint("?>");
+    }
+
+
+    public void handleCommand(int command) {
+
+        switch (command) {
+
+            case 1:
+                quickPrint("Good to hear!!\n");
+                break;
+            case 2:
+                quickPrint("You need a hug!\n" + getHug() + "\n");
+                break;
+            case 3:
+                quickPrint("Maybe this joke will make you happy:)\n\n");
+                quickPrint(Jokes.splitJoke(Jokes.getJoke()));
+                quickPrint("\n");
+
+                do {
+                    printSecondMenu();
+                    command = myInputReader();
+                    handleSecondCommand(command);
+                } while (command != 2);
+                break;
+            case 0:
+                quickPrint("Bye bye!!!");
+                break;
+
+            default:
+                quickPrint("Error: non valid entry, please try again");
+                break;
+
+        }
+
+    }
+
+    public void handleSecondCommand(int command) {
+
+        switch (command) {
+
+            case 1:
+                quickPrint(Jokes.splitJoke(Jokes.getJoke()));
+                quickPrint("\n");
+                break;
+            case 2:
+                quickPrint("Ok let's exit...\n");
+                break;
+
+            default:
+                quickPrint("Error: non valid entry, please try again");
+                break;
+        }
+    }
+
+
+    public int myInputReader() {
+        String str = input.nextLine();
+        while (!(str.matches("[0-9]+"))) {
+            quickPrint("Only digits allowed!\n");
+            quickPrint("?>");
+            str = input.nextLine();
+        }
+        return Integer.parseInt(str);
+    }
+
+
+    public void quickPrint(String text) {
+        System.out.print(text);
+
+
+    }
+
+    public String getHug() {
+        return "( つ´∀｀)つ";
+    }
+
+}
